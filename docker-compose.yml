@@ -14,35 +14,21 @@ services:
         environment:
             - MYSQL_DATABASE=projecttest
             - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_USER=admin
-    httpd:
-        container_name: httpd
-        image: httpd:2.4
-        ports:
-            - "81:80"
-        networks:
-            - sql_network
-    composer:
-        container_name: composer
-        image: composer:2.1.0 
-        networks:
-            - sql_network
-    php:
-        container_name: phpS
-        image: php:latest
-        networks:
-            - sql_network
     laravel:
-        container_name: Laravel
-        image: laravel:latest
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: "php artisan serve --host=0.0.0.0"
+        volumes:
+            - .:/app
+        ports:
+            - 8000:8000
+        depends_on:
+            - mysql
         networks:
             - sql_network
         env_file:
             - .env
-        depends_on : 
-            - composer
-            - mysql
-            - php
 networks:
     sql_network:
         external: false
@@ -51,5 +37,3 @@ networks:
 volumes:
     todo-mysql-data:
         external: false
-
-
