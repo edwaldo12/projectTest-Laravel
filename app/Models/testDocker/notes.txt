@@ -1,0 +1,12 @@
+to run docker using sql_network 
+run "docker network create sql_network"
+and make sure ports in our local we are gonna use didnt used by other apps
+our port runned : exposed port from docker container
+ports : "our port: "docker container port"
+and run "docker-compose up -d"
+run docker exec -it "name_laravel_container" php artisan migrate
+in this case docker exec -it projecttest-laravel-laravel-1 php artisan migrate
+
+
+if want to remove all container "docker prune -all"
+

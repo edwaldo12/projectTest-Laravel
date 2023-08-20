@@ -3,23 +3,25 @@ version: "3.7"
 services:
     mysql:
         container_name: mysql
-        image: mysql:latest
+        image: mysql:5.7
+        platform : 'linux/x86_64'
+        volumes:
+            - todo-mysql-data:/Applications/XAMPP/xamppfiles/var/mysql
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
         ports:
             - "3307:3306"
         networks:
             - sql_network
-        volumes:
-            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-        # environment:
-        #     - MYSQL_DATABASE=projecttest
-        #     - MYSQL_ROOT_PASSWORD=root
-        #     - MYSQL_USER=admins
-        #     - MYSQL_PASSWORD=123
+        environment:
+            - MYSQL_DATABASE=projecttest
+            - MYSQL_ROOT_PASSWORD=root
     laravel:
         build:
             context: .
             dockerfile: Dockerfile
         command: "php artisan serve --host=0.0.0.0"
+        volumes:
+            - .:/app
         ports:
             - 8000:8000
         depends_on:
